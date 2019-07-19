@@ -2,195 +2,96 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ApiModel extends CI_Model{
+	public function getKomDB($no_akaun){
+		$column = "NO_AKAUN,ALAMAT1,ALAMAT2,KATEGORI,PERKARA1,PERKARA3,JABATAN,NO_RUJUKAN,
+				   to_char(TKH_MASUK,'yyyy/mm/dd hh24:mi:ss') as TKH_MASUK,
+				   NO_RUJUKAN2,TAHUN,JENIS,PERKARA,PETAK,MASA,AKAUN,NO_PEKERJA,POST,
+				   to_char(TARIKH_POST,'yyyy/mm/dd hh24:mi:ss') as TARIKH_POST,
+				   PERKARA4,PERKARA5,KP,KAWASAN,
+				   to_char(TKH_ENTRY,'yyyy/mm/dd hh24:mi:ss') as TKH_ENTRY,
+				   ID_HANDHELD,CCTV,CATATAN,OKU,AMAUN_BAYAR,
+				   to_char(TKH_BAYAR,'yyyy/mm/dd hh24:mi:ss') as TKH_BAYAR,NO_RESIT";
+        $this->db->select($column);
+        $this->db->from('HASIL.BIL');
+        $this->db->where("NO_AKAUN",$no_akaun);
+        $query = $this->db->get();
+		if ($query->num_rows() > 0 ){
+        	$row = $query->row_array();
+		}else{
+			$row['mgs'] = "No Data";
+		}
 
-	public function kutipanDB($kod,$tarikh){
-		$this->db->select("*");
-		$this->db->from('KUTIPAN.KUTIPAN');
-		$this->db->where('KATEGORI', $kod);
-		$this->db->where("TARIKH BETWEEN TO_DATE ('".$tarikh."', 'DD-MM-YYYY')");
-		$this->db->where("TO_DATE ('".$tarikh."', 'DD-MM-YYYY') + 1");
-		$this->db->where("STATUS","A");
-		$query = $this->db->get();
-
-		if($query->num_rows() > 0){
-            $result = $query->result();
-        } else {
-            $result = "No Data";
-        }
 		$this->db->close();
-
-		return $result;
-	}
-
-    public function getcekDB($account_no){
-        $this->db->select("*");
-        $this->db->from('SKB.CEK_KEMBALI');
-        $this->db->where("ACCOUNT_NO","$account_no");
-        $query = $this->db->get();
-
-        if($query->num_rows() > 0){
-            $result = $query->result();
-        } else {
-            $result = "No Data";
-        }
-        $this->db->close();
-
-        return $result;
+		return $row;
     }
 
-    public function getpulangDB($account_no){
-        $this->db->select("*");
-        $this->db->from('SKB.PULANGBALIK_HASIL');
-        $this->db->where("ACCOUNT_NO","$account_no");
+	public function insertKompaun($input){
+		$this->db->select("*");
+        $this->db->from('HASIL.BIL');
+        $this->db->where("NO_AKAUN",$input['no_akaun']);
         $query = $this->db->get();
 
-        if($query->num_rows() > 0){
-            $result = $query->result();
-        } else {
-            $result = "No Data";
-        }
+		$this->db->set('NO_AKAUN', $input['no_akaun']);
+		$this->db->set('ALAMAT1', $input['alamat1']);
+		$this->db->set('ALAMAT2', $input['alamat2']);
+		$this->db->set('KATEGORI', $input['kategori']);
+		$this->db->set('PERKARA1',$input['perkara1']);
+		$this->db->set('PERKARA3', $input['perkara3']);
+		$this->db->set('JABATAN', $input['jabatan']);
+		$this->db->set('NO_RUJUKAN', $input['no_rujukan']);
+		$this->db->set('TKH_MASUK', "to_date('".$input['tkh_masuk']."','yyyy/mm/dd hh24:mi:ss')",FALSE);
+		$this->db->set('NO_RUJUKAN2', $input['no_rujukan2']);
+		$this->db->set('TAHUN', $input['tahun']);
+		$this->db->set('JENIS', $input['jenis']);
+		$this->db->set('PERKARA', $input['perkara']);
+		$this->db->set('PETAK', $input['petak']);
+		$this->db->set('MASA', $input['masa']);
+		$this->db->set('AKAUN', $input['akaun']);
+		$this->db->set('NO_PEKERJA', $input['no_pekerja']);
+		$this->db->set('POST',$input['post']);
+		$this->db->set('TARIKH_POST', "to_date('".$input['tarikh_post']."','yyyy/mm/dd hh24:mi:ss')",FALSE);
+		$this->db->set('PERKARA4', $input['perkara4']);
+		$this->db->set('PERKARA5', $input['perkara5']);
+        $this->db->set('KP', $input['kp']);
+        $this->db->set('KAWASAN', $input['kawasan']);
+        $this->db->set('TKH_ENTRY', "to_date('".$input['tkh_entry']."','yyyy/mm/dd hh24:mi:ss')",FALSE);
+        $this->db->set('ID_HANDHELD', $input['id_handheld']);
+        $this->db->set('CCTV', $input['cctv']);
+        $this->db->set('CATATAN', $input['catatan']);
+        $this->db->set('OKU', $input['oku']);
+        $this->db->set('AMAUN_BAYAR', $input['amaun_bayar']);
+		
+		if ($query->num_rows() > 0 ){
+			$mgs = "Already Exist";
+    	}else{			
+			$this->db->insert("HASIL.BIL");
+        	$mgs = "Success";
+		}
+
         $this->db->close();
-
-        return $result;
-    }
-
-    public function getguamDB($account_no){
-        $this->db->select("*");
-        $this->db->from('SKB.GUAMAN');
-        $this->db->where("ACCOUNT_NO","$account_no");
-        $query = $this->db->get();
-
-        if($query->num_rows() > 0){
-            $result = $query->result();
-        } else {
-            $result = "No Data";
-        }
-        $this->db->close();
-
-        return $result;
-    }
-
-	public function cekDB($input){
-		$fiscal = $input['fiscal'];
-		$transaction_date = $input['transaction_date'];
-		$posting_date = $input['posting_date'];
-		$tkh_batal = $input['tkh_batal'];
-
-		$this->db->set('ACCOUNT_NO', $input['account_no']);
-		$this->db->set('BILL_NO', $input['bill_no']);
-		$this->db->set('RESIT_NO', $input['resit_no']);
-		$this->db->set('FISCAL', "to_date('$fiscal','dd/mm/yyyy')",FALSE);
-		$this->db->set('TRANSACTION_DATE',"to_date('$transaction_date','dd/mm/yyyy')",FALSE);
-		$this->db->set('PAYMENT_METHOD', $input['payment_method']);
-		$this->db->set('REF_NO', $input['ref_no']);
-		$this->db->set('DEBIT_CREDIT', $input['debit_credit']);
-		$this->db->set('TRANSACTION_CODE', $input['transaction_code']);
-		$this->db->set('AMOUNT', $input['amount']);
-		$this->db->set('DESC_DEBIT_CREDIT', $input['desc_debit_credit']);
-		$this->db->set('VOT', $input['vot']);
-		$this->db->set('COST_CENTRE', $input['cost_centre']);
-		$this->db->set('ACCRUAL', $input['accrual']);
-		$this->db->set('POSTING_DATE',"to_date('$posting_date','dd/mm/yyyy')",FALSE);
-		$this->db->set('BATCH_NO', $input['batch_no']);
-		$this->db->set('HUTANG_LAPUK', $input['hutang_lapuk']);
-		$this->db->set('TKH_BATAL',"to_date('$tkh_batal','dd/mm/yyyy')",FALSE);
-		$this->db->set('SEBAB_BATAL', $input['sebab_batal']);
-		$this->db->insert("SKB.CEK_KEMBALI");
-
-		if($this->db->affected_rows() > 0){
-            $mgs = "success";
-        }else{
-            $mgs = "no affected row";
-        }
-        $this->db->close();
-
     	return $mgs;
 	}
 
-	public function pulangDB($input){
-        $fiscal = $input['fiscal'];
-		$transaction_date = $input['transaction_date'];
-		$posting_date = $input['posting_date'];
-		$tkh_baucer = $input['tkh_baucer'];
+	public function updateKompaun($input){
+		$this->db->set('AMAUN_BAYAR', $input['amaun_bayar']);
+		$this->db->set('TKH_BAYAR', "to_date('".$input['tkh_bayar']."','yyyy/mm/dd hh24:mi:ss')",FALSE);
+		$this->db->set('NO_RESIT', $input['no_resit']);
+		$this->db->set('MAHKAMAH', $input['mahkamah']);
+		$this->db->where('NO_AKAUN', $input['no_akaun']);
+		
+		$this->db->select("*");
+        $this->db->from('HASIL.BIL');
+        $this->db->where("NO_AKAUN",$input['no_akaun']);
+		$query = $this->db->get();
+		
+		if ($query->num_rows() > 0 ){
+			$this->db->update('HASIL.BIL');
+			$mgs = "Success";
+    	}else{			
+        	$mgs = "Not Exist";
+		}
 
-		$this->db->set('ACCOUNT_NO', $input['account_no']);
-		$this->db->set('BILL_NO', $input['bill_no']);
-		$this->db->set('RESIT_NO', $input['resit_no']);
-		$this->db->set('FISCAL', "to_date('$fiscal','dd/mm/yyyy')",FALSE);
-		$this->db->set('TRANSACTION_DATE',"to_date('$transaction_date','dd/mm/yyyy')",FALSE);
-		$this->db->set('PAYMENT_METHOD', $input['payment_method']);
-		$this->db->set('REF_NO', $input['ref_no']);
-		$this->db->set('DEBIT_CREDIT', $input['debit_credit']);
-		$this->db->set('TRANSACTION_CODE', $input['transaction_code']);
-		$this->db->set('AMOUNT', $input['amount']);
-		$this->db->set('DESC_DEBIT_CREDIT', $input['desc_debit_credit']);
-		$this->db->set('VOT', $input['vot']);
-		$this->db->set('COST_CENTRE', $input['cost_centre']);
-		$this->db->set('ACCRUAL', $input['accrual']);
-		$this->db->set('POSTING_DATE',"to_date('$posting_date','dd/mm/yyyy')",FALSE);
-		$this->db->set('BATCH_NO', $input['batch_no']);
-		$this->db->set('HUTANG_LAPUK', $input['hutang_lapuk']);
-		$this->db->set('TKH_BAUCER',"to_date('$tkh_baucer','dd/mm/yyyy')",FALSE);
-		$this->db->set('NO_BAUCER', $input['no_baucer']);
-        $this->db->insert("SKB.PULANGBALIK_HASIL");
-
-        if($this->db->affected_rows() > 0){
-            $mgs = "success";
-        }else{
-            $mgs = "no affected row";
-        }
-        $this->db->close();
-
-    	return $mgs;
+		$this->db->close();
+		return $mgs;
 	}
-
-	public function guamanDB($input){
-		$transaction_date = $input['transaction_date'];
-        $fiscal = $input['fiscal'];
-		$posting_date = $input['posting_date'];
-
-		$this->db->set('ACCOUNT_NO', $input['account_no']);
-		$this->db->set('BILL_NO', $input['bill_no']);
-		$this->db->set('TRANSACTION_DATE',"to_date('$transaction_date','dd/mm/yyyy')",FALSE);
-		$this->db->set('FISCAL',"to_date('$fiscal','dd/mm/yyyy')",FALSE);
-		$this->db->set('TRANSACTION_CODE', $input['transaction_code']);		
-		$this->db->set('DESC_DEBIT_CREDIT', $input['desc_debit_credit']);
-		$this->db->set('AMOUNT', $input['amount']);
-		$this->db->set('POSTING_DATE',"to_date('$posting_date','dd/mm/yyyy')",FALSE);
-        $this->db->insert("SKB.GUAMAN");
-
-        if($this->db->affected_rows() > 0){
-            $mgs = "success";
-        }else{
-            $mgs = "no affected row";
-        }
-        $this->db->close();
-
-    	return $mgs;
-	}
-
-	function hutanglapukDB($account_no){
-        $this->db->select("'x'");
-        $this->db->from("CUKAI.AKAUN_SEMASA_SB");
-        $this->db->where("NO_AKAUN", $account_no);
-        $query = $this->db->get();
-
-        $this->db->set('TKH_KEMASKINI',"to_char(sysdate,'DD/MON/YY')",FALSE);
-        $this->db->set('FLAG_LAPUK', '1');
-        $this->db->where('NO_AKAUN', $account_no);
-
-        if($query->num_rows() > 0){
-            $this->db->update("CUKAI.AKAUN_SEMASA_SB");
-            if($this->db->affected_rows() > 0){
-                $mgs = "success";
-            }else{
-                $mgs = "no affected row";
-            }
-        } else {
-            $mgs = "account number not exist";
-        }
-        $this->db->close();
-
-        return $mgs;
-    }
 }

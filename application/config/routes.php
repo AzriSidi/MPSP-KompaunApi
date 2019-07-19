@@ -49,14 +49,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'homecontroller';
+$route['default_controller'] = '';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['kutipan/kod/(:any)/tarikh/(:any)'] = 'apicontroller/getkutipan';
-$route['cekkembali'] = 'apicontroller/cekkembali';
-$route['pulangbalik'] = 'apicontroller/pulangbalik';
-$route['guaman'] = 'apicontroller/guaman';
-$route['hutanglapuk'] = 'apicontroller/hutanglapuk';
-$route['getcekkembali'] = 'apicontroller/getcekkembali';
-$route['getpulangbalik'] = 'apicontroller/getpulangbalik';
-$route['getguaman'] = 'apicontroller/getguaman';
+$route['sendKompaun'] = 'apicontroller/sendKompaun';
+$route['checkKompaun/no_akaun/(:any)'] = 'apicontroller/checkKompaun/$1';
+$route['viewKompaun'] = 'apicontroller/viewKompaun';
+$route['payKompaun'] = 'apicontroller/payKompaun';
+$route['viewPayKompaun'] = 'apicontroller/viewPayKompaun';

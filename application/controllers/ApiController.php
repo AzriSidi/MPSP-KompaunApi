@@ -5,161 +5,88 @@ require APPPATH.'/libraries/REST_Controller.php';
 use api\libraries\REST_Controller;
 
 class ApiController extends REST_Controller {
+    function viewKompaun_get() {
+        $dateTime = date('Y-m-d H:i:s' , time());
+        $time = date('H.i' , time());
+        $year = date('Y', time());
 
-    public function index(){
-        echo "This is home controller";
-    }
+        $data = array('no_akaun'=>'string', 'alamat1'=>'string' , 'alamat2'=>'string',
+            'kategori'=>'45', 'perkara1'=>'string', 'perkara3'=>'string', 'jabatan'=>'101',
+            'no_rujukan'=>'string','tkh_masuk'=>$dateTime, 'no_rujukan2'=>'string', 'tahun'=>$year, 
+            'jenis'=>'1','perkara'=>'P01', 'petak'=>'string', 'masa'=>$time, 'akaun'=>'76417',
+            'no_pekerja'=>'12345', 'post'=>'1','tarikh_post'=>$dateTime, 'perkara4'=>'string', 
+            'perkara5'=>'string', 'kp'=>'string', 'kawasan'=>'string', 'tkh_entry'=>$dateTime, 
+            'id_handheld'=>'string','cctv'=>'string', 'catatan'=>'string', 'oku'=>'string', 
+            'amaun_bayar'=>'0.00');
 
-    function cekkembali_get() {
-        $date = date('d/m/Y', time());
-        $data[] = array('account_no'=>'string', 'bill_no'=>'string' , 'resit_no'=>'string',
-            'fiscal'=>$date, 'transaction_date'=>$date, 'payment_method'=>'8',
-            'ref_no'=>'string', 'debit_credit'=>'DR', 'transaction_code'=>'001',
-            'amount'=>'0.00', 'desc_debit_credit'=>'string', 'vot'=>'string',
-            'cost_centre'=>'string', 'accrual'=>'1', 'posting_date'=>$date,
-            'batch_no'=>'string', 'hutang_lapuk'=>'0' , 'tkh_batal'=>$date,
-            'sebab_batal'=>'string');
         $this->response($data);
     }
 
-    function pulangbalik_get(){
-        $date = date('d/m/Y', time());
-        $data[] = array('account_no'=>'string', 'bill_no'=>'string' , 'resit_no'=>'string',
-            'fiscal'=>$date, 'transaction_date'=>$date, 'payment_method'=>'8',
-            'ref_no'=>'string', 'debit_credit'=>'DR', 'transaction_code'=>'1',
-            'amount'=>'0.00', 'desc_debit_credit'=>'string', 'vot'=>'string',
-            'cost_centre'=>'string', 'accrual'=>'1', 'posting_date'=>$date,
-            'batch_no'=>'string', 'hutang_lapuk'=>'0' , 'tkh_baucer'=>$date,
-            'no_baucer'=>'string');
-        $this->response($data);
-    }
-
-    function guaman_get(){
-        $date = date('d/m/Y', time());
-        $data[] = array('account_no'=>'string', 'bill_no'=>'string',
-            'transaction_date'=>$date, 'fiscal'=>$date,
-            'transaction_code'=>'509', 'desc_debit_credit'=>'string',
-            'amount'=>'0.00', 'posting_date'=>$date);
-        $this->response($data);
-    }
-
-    function hutanglapuk_get(){
-        $data[] = array('account_no'=>'string');
-        $this->response($data);
-    }
-
-    public function getKutipan_get() {
-        $kod = $this->uri->segment('3');
-        $tarikh = $this->uri->segment('5');
+    function checkKompaun_get($no_akaun){
         $this->load->model('ApiModel');
-        $db['records'] = $this->ApiModel->kutipanDB($kod,$tarikh);
-        $this->load->view('KutipanView',$db);
-    }
-
-    function getcekkembali_get(){
-        $account_no = $this->get('account_no');
-        $this->load->model('ApiModel');
-        $data['CEK_KEMBALI'] = $this->ApiModel->getcekDB($account_no);
-        $this->response($data);
-    }
-
-    function getpulangbalik_get(){
-        $account_no = $this->get('account_no');
-        $this->load->model('ApiModel');
-        $data['PULANG_BALIK_HASIL'] = $this->ApiModel->getpulangDB($account_no);
-        $this->response($data);
-    }
-
-    function getguaman_get(){
-        $account_no = $this->get('account_no');
-        $this->load->model('ApiModel');
-        $data['GUAMAN'] = $this->ApiModel->getguamDB($account_no);
+        $data = $this->ApiModel->getKomDB($no_akaun);
         $this->response($data);
     }
      
-    function cekkembali_post() {
-        $items = json_decode(json_encode($this->post()));
-        foreach($items as $item){
-            $input['account_no'] = $item->account_no;
-            $input['bill_no'] = $item->bill_no;
-            $input['resit_no'] = $item->resit_no;
-            $input['fiscal'] = $item->fiscal;
-            $input['transaction_date'] = $item->transaction_date;
-            $input['payment_method'] = $item->payment_method;
-            $input['ref_no'] = $item->ref_no;
-            $input['debit_credit'] = $item->debit_credit;
-            $input['transaction_code'] = $item->transaction_code;
-            $input['amount'] = $item->amount;
-            $input['desc_debit_credit'] = $item->desc_debit_credit;
-            $input['vot'] = $item->vot;
-            $input['cost_centre'] = $item->cost_centre;
-            $input['accrual'] = $item->accrual;
-            $input['posting_date'] = $item->posting_date;
-            $input['batch_no'] = $item->batch_no;
-            $input['hutang_lapuk'] = $item->hutang_lapuk;
-            $input['tkh_batal'] = $item->tkh_batal;
-            $input['sebab_batal'] = $item->sebab_batal;
+    function sendKompaun_post() {
+        $json = json_decode(json_encode($this->post()));
 
-            $this->load->model('ApiModel');
-            $data['message'] = $this->ApiModel->CekDB($input);
-        }
-        $this->response($data);
-    }    
-
-    function pulangbalik_post(){
-        $items = json_decode(json_encode($this->post()));
-        foreach($items as $item){
-            $input['account_no'] = $item->account_no;
-            $input['bill_no'] = $item->bill_no;
-            $input['resit_no'] = $item->resit_no;
-            $input['fiscal'] = $item->fiscal;
-            $input['transaction_date'] = $item->transaction_date;
-            $input['payment_method'] = $item->payment_method;
-            $input['ref_no'] = $item->ref_no;
-            $input['debit_credit'] = $item->debit_credit;
-            $input['transaction_code'] = $item->transaction_code;
-            $input['amount'] = $item->amount;
-            $input['desc_debit_credit'] = $item->desc_debit_credit;
-            $input['vot'] = $item->vot;
-            $input['cost_centre'] = $item->cost_centre;
-            $input['accrual'] = $item->accrual;
-            $input['posting_date'] = $item->posting_date;
-            $input['batch_no'] = $item->batch_no;
-            $input['hutang_lapuk'] = $item->hutang_lapuk;
-            $input['tkh_baucer'] = $item->tkh_baucer;
-            $input['no_baucer'] = $item->no_baucer;
-
-            $this->load->model('ApiModel');
-            $data['message'] = $this->ApiModel->pulangDB($input);
-        }
+        $input['no_akaun'] = $json->no_akaun;
+        $input['alamat1'] = $json->alamat1;
+        $input['alamat2'] = $json->alamat2;
+        $input['kategori'] = $json->kategori;
+        $input['perkara1'] = $json->perkara1;
+        $input['perkara3'] = $json->perkara3;
+        $input['jabatan'] = $json->jabatan;
+        $input['no_rujukan'] = $json->no_rujukan;
+        $input['tkh_masuk'] = $json->tkh_masuk;
+        $input['no_rujukan2'] = $json->no_rujukan2;
+        $input['tahun'] = $json->tahun;
+        $input['jenis'] = $json->jenis;
+        $input['perkara'] = $json->perkara;
+        $input['petak'] = $json->petak;
+        $input['masa'] = $json->masa;
+        $input['akaun'] = $json->akaun;
+        $input['no_pekerja'] = $json->no_pekerja;
+        $input['post'] = $json->post;
+        $input['tarikh_post'] = $json->tarikh_post;
+        $input['perkara4'] = $json->perkara4;
+        $input['perkara5'] = $json->perkara5;
+        $input['kp'] = $json->kp;
+        $input['kawasan'] = $json->kawasan;
+        $input['tkh_entry'] = $json->tkh_entry;
+        $input['id_handheld'] = $json->id_handheld;
+        $input['cctv'] = $json->cctv;
+        $input['catatan'] = $json->catatan;
+        $input['oku'] = $json->oku;
+        $input['amaun_bayar'] = $json->amaun_bayar;
+        
+        $this->load->model('ApiModel');
+        $data['message'] = $this->ApiModel->insertKompaun($input);
         $this->response($data);
     }
 
-    function guaman_post(){
-        $items = json_decode(json_encode($this->post()));
-        foreach($items as $item){
-            $input['account_no'] = $item->account_no;
-            $input['bill_no'] = $item->bill_no;
-            $input['transaction_date'] = $item->transaction_date;
-            $input['fiscal'] = $item->fiscal;
-            $input['transaction_code'] = $item->transaction_code;
-            $input['desc_debit_credit'] = $item->desc_debit_credit;
-            $input['amount'] = $item->amount;
-            $input['posting_date'] = $item->posting_date;
+    function payKompaun_post(){
+        $json = json_decode(json_encode($this->post()));
 
-            $this->load->model('ApiModel');
-            $data['message'] = $this->ApiModel->guamanDB($input);
-        }
+        $input['no_akaun'] = $json->no_akaun;
+        $input['tkh_bayar'] = $json->tkh_bayar;
+        $input['amaun_bayar'] = $json->amaun_bayar;
+        $input['no_resit'] = $json->no_resit;
+
+        $this->load->model('ApiModel');
+        $data['message'] = $this->ApiModel->updateKompaun($input);
         $this->response($data);
     }
 
-    function hutanglapuk_post(){
-        $items = json_decode(json_encode($this->post()));
-        foreach($items as $item){
-            $account_no = $item->account_no;
-            $this->load->model('ApiModel');
-            $data['message'] = $this->ApiModel->hutanglapukDB($account_no);
-        }
+    function viewPayKompaun_get() {
+        $dateTime = date('Y-m-d H:i:s' , time());
+        $time = date('H.i' , time());
+        $year = date('Y', time());
+
+        $data = array('no_akaun'=>'string','tkh_bayar'=>$dateTime,'no_resit'=>'string',
+                'amaun_bayar'=>'0.00');
+
         $this->response($data);
     }
 }
