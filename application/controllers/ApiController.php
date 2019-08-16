@@ -25,9 +25,9 @@ class ApiController extends REST_Controller {
             'kategori'=>'45', 'no_plat'=>'string', 'road_tax'=>'string', 'jabatan'=>'101',
             'no_rujukan'=>'string','tkh_masuk'=>$dateTime, 'kod_kesalahan'=>'string', 'tahun'=>$year, 
             'jenis'=>'1','perkara'=>'P01', 'petak'=>'string', 'masa'=>$time, 'kod_akaun'=>'76417',
-			'no_pekerja'=>'12345', 'post'=>'1','tarikh_post'=>$dateTime, 'jenama'=>'string',
-			'kp'=>'string', 'kawasan'=>'string', 'tkh_entry'=>$dateTime, 'id_handheld'=>'string',
-			'cctv'=>'string', 'catatan'=>'string', 'oku'=>'string');
+			'no_pekerja'=>'12345', 'jenama'=>'string','kp'=>'string', 'kawasan'=>'string', 
+			'tkh_entry'=>$dateTime, 'id_handheld'=>'string','cctv'=>'string', 'catatan'=>'string', 
+			'oku'=>'string');
 
         $this->response($data);
 	}
@@ -63,8 +63,6 @@ class ApiController extends REST_Controller {
         $input['masa'] = $json->masa;
         $input['kod_akaun'] = $json->kod_akaun;
         $input['no_pekerja'] = $json->no_pekerja;
-        $input['post'] = $json->post;
-        $input['tarikh_post'] = $json->tarikh_post;
         $input['jenama'] = $json->jenama;
         $input['kp'] = $json->kp;
         $input['kawasan'] = $json->kawasan;

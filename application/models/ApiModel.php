@@ -7,7 +7,6 @@ class ApiModel extends CI_Model{
 		$column = "t1.NO_AKAUN,t1.ALAMAT1,t1.ALAMAT2,t1.KATEGORI,t1.PERKARA1,t1.PERKARA3,
 				   t1.JABATAN,t1.NO_RUJUKAN,to_char(TKH_MASUK,'yyyy/mm/dd hh24:mi:ss') TKH_MASUK,
 				   t1.NO_RUJUKAN2,t1.TAHUN,t1.JENIS,t1.PERKARA,t1.PETAK,t1.MASA,t1.AKAUN,t1.NO_PEKERJA,
-				   t1.POST,to_char(TARIKH_POST,'yyyy/mm/dd hh24:mi:ss') TARIKH_POST,
 				   t1.PERKARA4,t1.KP,t1.KAWASAN,to_char(TKH_ENTRY,'yyyy/mm/dd hh24:mi:ss') TKH_ENTRY,
 				   t1.ID_HANDHELD,t1.CCTV,t1.CATATAN,t1.OKU,
 				   to_char(TKH_BAYAR,'yyyy/mm/dd hh24:mi:ss') TKH_BAYAR, t2.AMAUN_BAYAR, t2.NO_RESIT";
@@ -15,7 +14,6 @@ class ApiModel extends CI_Model{
 		$column2 = "NO_AKAUN,ALAMAT1,ALAMAT2,KATEGORI,PERKARA1,PERKARA3,
 					JABATAN,NO_RUJUKAN,to_char(TKH_MASUK,'yyyy/mm/dd hh24:mi:ss') TKH_MASUK,
 					NO_RUJUKAN2,TAHUN,JENIS,PERKARA,PETAK,MASA,AKAUN,NO_PEKERJA,
-					POST,to_char(TARIKH_POST,'yyyy/mm/dd hh24:mi:ss') TARIKH_POST,
 					PERKARA4,KP,KAWASAN,to_char(TKH_ENTRY,'yyyy/mm/dd hh24:mi:ss') TKH_ENTRY,
 					ID_HANDHELD,CCTV,CATATAN,OKU";
 		
@@ -67,8 +65,6 @@ class ApiModel extends CI_Model{
 			->set('MASA', $input['masa'])
 			->set('AKAUN', $input['kod_akaun'])
 			->set('NO_PEKERJA', $input['no_pekerja'])
-			->set('POST',$input['post'])
-			->set('TARIKH_POST', "to_date('".$input['tarikh_post']."','yyyy/mm/dd hh24:mi:ss')",FALSE)
 			->set('PERKARA4', $input['jenama'])
         	->set('KP', $input['kp'])
         	->set('KAWASAN', $input['kawasan'])
