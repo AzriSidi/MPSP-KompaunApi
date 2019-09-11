@@ -86,16 +86,22 @@ class ApiModel extends CI_Model{
 	}
 
 	public function insertDataTempPSP($input){
+		$this->db->select("*")
+        	->from('MPSP.DATATEMP_PSP')
+        	->where("NO_AKAUN",$input['no_kompaun']);
+        $query = $this->db->get();
+
 		$this->db->set('NO_AKAUN', $input['no_kompaun'])
 			->set('TKH_BAYAR', "to_date('".$input['tkh_bayar']."','yyyy/mm/dd hh24:mi:ss')",FALSE)
 			->set('AMAUN_BAYAR', $input['amaun_bayar'])
-			->set('NO_RESIT', $input['no_resit'])
-			->insert("MPSP.DATATEMP_PSP");
-		if($this->db->affected_rows() > 0){
+			->set('NO_RESIT', $input['no_resit']);
+		
+		if ($query->num_rows() > 0 ){
+			$mgs = "Already Exist";
+		}else{			
+			$this->db->insert("MPSP.DATATEMP_PSP");
 			$mgs = "Success";
-		}else{
-			$mgs = "No affected rows";
-		}		
+		}	
 
 		$this->db->close();
 		return $mgs;

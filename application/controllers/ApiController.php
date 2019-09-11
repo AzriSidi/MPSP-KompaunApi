@@ -74,7 +74,6 @@ class ApiController extends REST_Controller {
         
         $data['message'] = $this->ApiModel->insertBilPSP($input);
         $this->response($data);
-		//$data = $this->decodeToken($input);
 	}
 
     function payKompaun_post(){
@@ -88,26 +87,4 @@ class ApiController extends REST_Controller {
         $data['message'] = $this->ApiModel->insertDataTempPSP($input);
         $this->response($data);
     }
-
-	/* public function decodeToken($input){	
-        if (array_key_exists('token', $input) && !empty($input)) {
-            $decodedToken = AUTHORIZATION::validateToken($input['token']);
-            if ($decodedToken != false) {
-				$json = json_decode(json_encode($decodedToken));
-				$user = $json->username;
-				$pass = $json->password;
-
-				if($user=="Plamera" && $pass=="Plamera123"){
-        			$data['message'] = $this->ApiModel->insertKompaun($input);
-				}else{
-					$data['message'] = "Wrong token";
-				}
-
-				$this->response($data);
-                //return;
-			}
-		}
-		
-        $this->set_response("Unauthorised", REST_Controller::HTTP_UNAUTHORIZED);
-    } */
 }
