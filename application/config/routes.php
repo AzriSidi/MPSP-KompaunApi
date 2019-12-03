@@ -55,3 +55,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['sendKompaun'] = 'apicontroller/sendKompaun';
 $route['checkKompaun/(:any)'] = 'apicontroller/checkKompaun/$1';
 $route['payKompaun'] = 'apicontroller/payKompaun';
+$route['updateKompaun'] = 'apicontroller/updateKompaun';
